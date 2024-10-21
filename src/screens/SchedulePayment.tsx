@@ -3,7 +3,13 @@ import {View, StyleSheet, Dimensions, Text} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import InputField from '../components/InputField';
 import DropDownField from '../components/DropDownField';
-import {Cable_Bill, Packages, Request_Type} from '../constants/SchedulePayment';
+import {
+  Cable_Bill,
+  Network_Provider,
+  Packages,
+  Request_Type,
+} from '../constants/SchedulePayment';
+import IconWithTitleDropdown from '../components/IconWithTitleDropdown';
 
 const {height, width} = Dimensions.get('window');
 
@@ -12,6 +18,7 @@ export function SchedulePayment() {
   const [cableBill, setCableBill] = useState('');
   const [requestType, setRequestType] = useState('');
   const [packageType, setPackageType] = useState('');
+  const [networkProvider, setNetworkProvider] = useState('');
 
   return (
     <View style={styles.container}>
@@ -48,6 +55,14 @@ export function SchedulePayment() {
             onSelect={setPackageType}
             placeholder={'Select pacakge'}
             dropdown_data={Packages}
+          />
+          {/* IconWithTitleDropdown field for to select network providers */}
+          <IconWithTitleDropdown
+            label={'Select network provider'}
+            value={networkProvider}
+            onSelect={setNetworkProvider}
+            placeholder={'Select pacakge'}
+            dropdown_data={Network_Provider}
           />
         </View>
       </KeyboardAwareScrollView>
