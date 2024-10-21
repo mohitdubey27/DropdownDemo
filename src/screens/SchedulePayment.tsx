@@ -53,7 +53,7 @@ export function SchedulePayment() {
             label={'Select package'}
             value={packageType}
             onSelect={setPackageType}
-            placeholder={'Select pacakge'}
+            placeholder={'Select package'}
             dropdown_data={Packages}
           />
           {/* IconWithTitleDropdown field for to select network providers */}
@@ -61,7 +61,7 @@ export function SchedulePayment() {
             label={'Select network provider'}
             value={networkProvider}
             onSelect={setNetworkProvider}
-            placeholder={'Select pacakge'}
+            placeholder={'Select package'}
             dropdown_data={Network_Provider}
           />
         </View>
