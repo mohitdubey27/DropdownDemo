@@ -73,7 +73,7 @@ const DropDownField: FC<DropDownFieldProps> = ({
         <Text style={value ? styles.dropdownText : styles.placeholder}>
           {value ? value : placeholder}
         </Text>
-        <Text style={styles.arrowSymbol}>{showDropdown ? '⋀' : '⋁'}</Text>
+        <Text style={styles.arrowSymbol}>{showDropdown ? '▲' : '▼'}</Text>
       </Pressable>
       {showDropdown && dropdown_data?.length && (
         <Modal animationType="fade" transparent={true} visible={showDropdown}>
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   arrowSymbol: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: '600',
     color: '#000',
   },

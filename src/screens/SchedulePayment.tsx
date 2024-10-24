@@ -10,6 +10,7 @@ import {
   Request_Type,
 } from '../constants/SchedulePayment';
 import IconWithTitleDropdown from '../components/IconWithTitleDropdown';
+import CountryListDropdown from '../components/CountryListDropdown';
 
 const {height, width} = Dimensions.get('window');
 
@@ -19,6 +20,7 @@ export function SchedulePayment() {
   const [requestType, setRequestType] = useState('');
   const [packageType, setPackageType] = useState('');
   const [networkProvider, setNetworkProvider] = useState('');
+  const [amount, setAmount] = useState({symbol: '₦', amount: ''});
 
   return (
     <View style={styles.container}>
@@ -63,6 +65,13 @@ export function SchedulePayment() {
             onSelect={setNetworkProvider}
             placeholder={'Select pacakge'}
             dropdown_data={Network_Provider}
+          />
+          {/* Input field to enter amount and select countries*/}
+          <CountryListDropdown
+            label={'Monthly Budget'}
+            placeholder={'Enter amount'}
+            value={amount}
+            onChange={setAmount}
           />
         </View>
       </KeyboardAwareScrollView>

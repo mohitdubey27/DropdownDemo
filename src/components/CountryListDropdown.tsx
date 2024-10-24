@@ -1,4 +1,4 @@
-import React, {FC, useRef, useState} from 'react';
+import React, {useState, useRef, FC} from 'react';
 import {
   Pressable,
   StyleSheet,
@@ -7,28 +7,28 @@ import {
   Modal,
   TouchableOpacity,
   FlatList,
-  Image,
+  TextInput,
 } from 'react-native';
-import {Network_Provider} from '../constants/SchedulePayment';
+import {Country_List} from '../constants/SchedulePayment';
 
-interface IconWithTitleDropdownProps {
+interface CountryListDropdownProps {
   label: string;
   placeholder: string;
-  value: string;
-  onSelect: (val: string) => void;
-  dropdown_data: typeof Network_Provider;
+  value: {symbol: string; amount: string};
+  onChange: (val: {symbol: string; amount: string}) => void;
 }
 
-const IconWithTitleDropdown: FC<IconWithTitleDropdownProps> = ({
+const CountryListDropdown: FC<CountryListDropdownProps> = ({
   label,
   placeholder,
   value,
-  onSelect,
-  dropdown_data,
+  onChange,
 }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownTop, setDropdownTop] = useState(0);
   const dropdownButtonRef = useRef<TouchableOpacity>(null);
+
+  const dropdown_data = Country_List;
 
   // Customizing dropdown height based on the available items
   const dropdownHeight =
@@ -64,13 +64,37 @@ const IconWithTitleDropdown: FC<IconWithTitleDropdownProps> = ({
     setShowDropdown(true);
   };
 
-  const dropdownValue = (value: string) => {
+  const inputFieldValue = (value: {symbol: string; amount: string}) => {
     const item: any =
-      value && dropdown_data?.find(item => item?.name === value);
+      value?.symbol &&
+      dropdown_data?.find(item => item?.currency_symbol === value.symbol);
     return (
       <View style={styles.dropdownValueField}>
-        <Image style={styles.icon} source={item?.logo} resizeMode="cover" />
-        <Text style={styles.dropdownText}>{item?.name}</Text>
+        <View style={styles.amountField}>
+          <View style={styles.currencySymbolView}>
+            <Text style={styles.currencySymbolText}>
+              {value?.symbol ? item?.currency_symbol : '₦'}
+            </Text>
+          </View>
+          <TextInput
+            style={styles.textInput}
+            placeholder={placeholder}
+            value={item?.amount}
+            keyboardType={'decimal-pad'}
+            onChangeText={(val: string) => {
+              onChange({symbol: value?.symbol, amount: val});
+            }}
+          />
+        </View>
+        <Pressable
+          style={styles.flagField}
+          ref={dropdownButtonRef}
+          onPress={openDropdown}>
+          <Text style={styles.flagText}>
+            {value?.symbol ? item?.flag : '🇳🇬'}
+          </Text>
+          <Text style={styles.arrowSymbol}>{showDropdown ? '▲' : '▼'}</Text>
+        </Pressable>
       </View>
     );
   };
@@ -78,19 +102,7 @@ const IconWithTitleDropdown: FC<IconWithTitleDropdownProps> = ({
   return (
     <View style={styles.dropdownContainer}>
       <Text style={styles.label}>{label}</Text>
-      <Pressable
-        ref={dropdownButtonRef}
-        style={styles.dropDownField}
-        onPress={openDropdown}>
-        {value ? (
-          dropdownValue(value)
-        ) : (
-          <Text style={value ? styles.dropdownText : styles.placeholder}>
-            {placeholder}
-          </Text>
-        )}
-        <Text style={styles.arrowSymbol}>{showDropdown ? '▲' : '▼'}</Text>
-      </Pressable>
+      <View style={styles.textField}>{inputFieldValue(value)}</View>
       {showDropdown && dropdown_data?.length && (
         <Modal animationType="fade" transparent={true} visible={showDropdown}>
           <Pressable
@@ -107,14 +119,13 @@ const IconWithTitleDropdown: FC<IconWithTitleDropdownProps> = ({
                   <Pressable
                     style={styles.dropdownItem}
                     onPress={function (): void {
-                      onSelect(item.name);
+                      onChange({
+                        symbol: item.currency_symbol,
+                        amount: value?.amount,
+                      });
                       setShowDropdown(false);
                     }}>
-                    <Image
-                      style={styles.icon}
-                      source={item.logo}
-                      resizeMode="cover"
-                    />
+                    <Text style={styles.flagText}>{item.flag}</Text>
                     <Text style={styles.dropdownItemText}>{item.name}</Text>
                   </Pressable>
                 )}
@@ -128,7 +139,7 @@ const IconWithTitleDropdown: FC<IconWithTitleDropdownProps> = ({
   );
 };
 
-export default IconWithTitleDropdown;
+export default CountryListDropdown;
 
 const styles = StyleSheet.create({
   dropdownContainer: {
@@ -140,29 +151,15 @@ const styles = StyleSheet.create({
     color: '#000',
     fontWeight: '400',
   },
-  dropDownField: {
+  textField: {
     height: 45,
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 8,
-    paddingHorizontal: 10,
     marginVertical: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  placeholder: {
-    fontSize: 16,
-    fontWeight: '400',
-    color: 'gray',
-    flex: 1,
-  },
-  dropdownText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#000',
-    flex: 1,
-    marginLeft: 8,
   },
   arrowSymbol: {
     fontSize: 16,
@@ -195,16 +192,44 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     color: '#000',
-    marginLeft: 8,
-  },
-  icon: {
-    height: 18,
-    width: 18,
+    marginLeft: 3,
   },
   dropdownValueField: {
     flex: 1,
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  amountField: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  currencySymbolView: {
+    height: 43,
+    width: 35,
+    borderRadius: 8,
+    backgroundColor: 'lightgray',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  currencySymbolText: {
+    fontSize: 18,
+  },
+  textInput: {
+    flex: 1,
+    fontSize: 16,
+    marginHorizontal: 8,
+  },
+  flagField: {
+    flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    marginRight: 10,
+    height: 45,
+  },
+  flagText: {
+    fontSize: 16,
+    marginHorizontal: 3,
   },
 });

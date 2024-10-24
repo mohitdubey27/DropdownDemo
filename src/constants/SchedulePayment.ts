@@ -29,3 +29,12 @@ export const Network_Provider = [
   {id: 3, name: '9MOBILE', logo: images.nine_mobile},
   {id: 4, name: 'AIRTEL', logo: images.airtel},
 ];
+
+//Data for Country listing
+export const Country_List = [
+  {id: 1, name: 'India', currency_symbol: '₹', flag: '🇮🇳'},
+  {id: 2, name: 'Nigeria', currency_symbol: '₦', flag: '🇳🇬'},
+  {id: 3, name: 'USA', currency_symbol: '$', flag: '🇺🇸'},
+  {id: 4, name: 'China', currency_symbol: '¥', flag: '🇨🇳'},
+  {id: 5, name: 'Spain', currency_symbol: '€', flag: '🇪🇸'},
+];
