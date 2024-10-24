@@ -73,7 +73,7 @@ const CountryListDropdown: FC<CountryListDropdownProps> = ({
         <View style={styles.amountField}>
           <View style={styles.currencySymbolView}>
             <Text style={styles.currencySymbolText}>
-              {value?.symbol ? item?.currency_symbol : '₦'}
+              {item?.currency_symbol}
             </Text>
           </View>
           <TextInput
@@ -90,9 +90,7 @@ const CountryListDropdown: FC<CountryListDropdownProps> = ({
           style={styles.flagField}
           ref={dropdownButtonRef}
           onPress={openDropdown}>
-          <Text style={styles.flagText}>
-            {value?.symbol ? item?.flag : '🇳🇬'}
-          </Text>
+          <Text style={styles.flagText}>{item?.flag}</Text>
           <Text style={styles.arrowSymbol}>{showDropdown ? '▲' : '▼'}</Text>
         </Pressable>
       </View>
